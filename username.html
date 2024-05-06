@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username</title>
+    <script src="webauthn.js"></script>
+</head>
+<body>
+
+<h1>Username</h1>
+<a href="/index.html"><button>back</button></a>
+
+<div>
+    <form id="signupForm">
+        <h2>Sign-up</h2>
+        <label for="signUpUsername">Username:</label><br>
+        <input type="text" id="signUpUsername" autocomplete="username"><br>
+        <button type="button" id="register">Sign-up</button>
+    </form>
+
+    <form id="loginForm">
+        <h2>Login</h2>
+        <label for="loginUsername">Username:</label><br>
+        <input type="text" id="loginUsername" autocomplete="username webauthn"><br>
+        <button type="button" id="login">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+
+<script>
+    document.getElementById('register').addEventListener('click', function() {
+        const username = document.getElementById('signUpUsername').value.trim();
+        register(username);
+    });
+
+    document.getElementById('login').addEventListener('click', function() {
+        const username = document.getElementById('loginUsername').value.trim();
+        regularLogin(username);
+    });
+</script>
+</body>
+</html>

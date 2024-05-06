@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Username + Email Login</title>
+    <script src="webauthn.js"></script>
+</head>
+<body>
+
+<h1>Two Username + Email Login</h1>
+<a href="/index.html">
+    <button>back</button>
+</a>
+
+<div>
+    <form id="signupForm1">
+        <h2>Sign-up with Username</h2>
+        <label for="signUpUsername">Username:</label><br>
+        <input type="text" id="signUpUsername" autocomplete="username"><br>
+        <label for="signupPassword1">Password:</label><br>
+        <input type="password" id="signupPassword1" autocomplete="new-password"><br>
+        <button type="button" id="register1">Sign-up</button>
+    </form>
+
+    <form id="signupForm2">
+        <h2>Sign-up with Email</h2>
+        <label for="signUpEmail">Email:</label><br>
+        <input type="email" id="signUpEmail" autocomplete="email"><br>
+        <label for="signupPassword2">Password:</label><br>
+        <input type="password" id="signupPassword2" autocomplete="new-password"><br>
+        <button type="button" id="register2">Sign-up</button>
+    </form>
+    <form id="loginForm1">
+        <h2>Login</h2>
+        <label for="loginUsername">Username:</label><br>
+        <input type="text" id="loginUsername" autocomplete="username webauthn"><br>
+        <label for="loginPassword1">Password:</label><br>
+        <input type="password" id="loginPassword1" autocomplete="current-password webauthn"><br>
+        <button type="button" id="login1">Login</button>
+    </form>
+    <form id="loginForm2">
+        <h2>Login</h2>
+        <label for="loginEmail">Email:</label><br>
+        <input type="email" id="loginEmail" autocomplete="email webauthn"><br>
+        <label for="loginPassword2">Password:</label><br>
+        <input type="password" id="loginPassword2" autocomplete="current-password webauthn"><br>
+        <button type="button" id="login2">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    document.getElementById('register1').addEventListener('click', function() {
+        const username = document.getElementById('signUpUsername').value.trim();
+        const password = document.getElementById('signupPassword1').value.trim();
+        if (!username || !password) {
+            alert('Please enter both username and password to register.');
+            return;
+        }
+        // Assuming register is a function that takes username and password
+        register(username);
+    });
+
+    document.getElementById('register2').addEventListener('click', function() {
+        const email = document.getElementById('signUpEmail').value.trim();
+        const password = document.getElementById('signupPassword2').value.trim();
+        if (!email || !password) {
+            alert('Please enter both email and password to register.');
+            return;
+        }
+        // Assuming register is a function that takes email and password
+        register(email);
+    });
+
+    document.getElementById('login1').addEventListener('click', function () {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword1').value.trim();
+        if (!username || !password) {
+            alert('Please enter both username and password to login.');
+            return;
+        }
+        // Assuming regularLogin is a function that takes username and password
+        regularLogin(username);
+    });
+
+    document.getElementById('login2').addEventListener('click', function () {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword2').value.trim();
+        if (!email || !password) {
+            alert('Please enter both email and password to login.');
+            return;
+        }
+        // Assuming regularLogin is a function that takes email and password
+        regularLogin(email)
+    });
+</script>
+</body>
+</html>

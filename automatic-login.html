@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic login</title>
+</head>
+<body>
+
+<h1>Automatic login</h1>
+
+<a href="/index.html"><button>back</button></a>
+
+<div>
+    <form id="signupForm">
+        <h2>Sign-up</h2>
+        <label for="signUpEmail">Email:</label><br>
+        <input type="email" id="signUpEmail"autocomplete="email"><br>
+        <button type="button" id="register">Sign-up</button>
+    </form>
+
+    <form id="loginForm">
+        <h2>Login</h2>
+        <label for="loginEmail">Email:</label><br>
+        <input type="email" id="loginEmail" autocomplete="email webauthn"><br>
+        <button type="button" id="login">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    document.getElementById('register').addEventListener('click', function() {
+        const username = document.getElementById('signUpEmail').value.trim();
+        register(username);
+    });
+
+    document.getElementById('login').addEventListener('click', function() {
+        const username = document.getElementById('loginEmail').value.trim();
+        regularLogin(username);
+    });
+
+    async function register(username) {
+
+        if (abortController) {
+            abortController.abort();
+            abortController = null; // Reset the controller after aborting
+        }
+
+        if (!username) {
+            updateStatus('Username is required');
+            return;
+        }
+        console.log("Username is "+ username)
+
+
+        // Simulate getting challenge and other data from server
+        const publicKeyCredentialCreationOptions = {
+            rp: { name: "Corbado" },
+            user: {
+                id: new TextEncoder().encode(username),
+                name: username,
+                displayName: username
+            },
+            challenge: Uint8Array.from("randomChallengeString", c=>c.charCodeAt(0)),
+            pubKeyCredParams: [
+                { type: "public-key", alg: -7 }, // ES256 algorithm
+                { type: "public-key", alg: -257 },
+            ],
+            authenticatorSelection: {
+                authenticatorAttachment: "platform",
+                requireResidentKey: false,
+                userVerification: "preferred"
+            },
+            timeout: 60000,
+            attestation: "direct"
+        };
+
+        try {
+            const credential = await navigator.credentials.create({publicKey: publicKeyCredentialCreationOptions});
+            console.log("Credential Created", credential);
+            updateStatus(`Registration successful for ${username}`);
+            // Here, send the `credential` object to the server for verification and storage
+        } catch (err) {
+            console.error("Registration error", err);
+            updateStatus(`Registration failed: ${err.message}`);
+        }
+    }
+
+    async function regularLogin(username) {
+        if (abortController) {
+            abortController.abort();
+            abortController = null; // Reset the controller after aborting
+        }
+
+        // Create a new AbortController for this operation
+        abortController = new AbortController();
+
+        if (!username) {
+            console.log('Username is required');
+            return;
+        }
+
+        // Adjusted publicKeyCredentialRequestOptions for conditional UI
+        const publicKeyCredentialRequestOptions = {
+            challenge: Uint8Array.from("randomChallengeString", c => c.charCodeAt(0)),
+            timeout: 60000,
+            userVerification: "preferred",
+        };
+
+        try {
+            const assertion = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions });
+            console.log("Assertion obtained", assertion);
+            // Here, send the `assertion` object to the server for verification
+        } catch (err) {
+            console.error("Login error", err);
+        }
+    }
+
+    async function conditionalMediationLogin() {
+
+        abortController = new AbortController();
+        const signal = abortController.signal;
+
+
+        // Adjusted publicKeyCredentialRequestOptions for conditional UI
+        const publicKeyCredentialRequestOptions = {
+            challenge: Uint8Array.from("randomChallengeString", c => c.charCodeAt(0)),
+            timeout: 60000,
+            userVerification: "preferred",
+        };
+
+        try {
+            const assertion = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions, mediation: "conditional", signal: signal});
+            console.log("Assertion obtained", assertion);
+            // Here, send the `assertion` object to the server for verification
+        } catch (err) {
+            console.error("Login error", err);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Attempt automated login check after page loads
+        try {
+            await conditionalMediationLogin();
+            await regularLogin("testusername")
+
+        } catch (err) {
+            console.error("Auto login check failed", err);
+        }
+    });
+</script>
+</body>
+</html>

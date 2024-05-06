@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username, Email + Password</title>
+    <script src="webauthn.js"></script>
+</head>
+<body>
+
+<h1>Username, Email + Password</h1>
+<a href="/index.html">
+    <button>back</button>
+</a>
+
+<div>
+    <form id="signupForm">
+        <h2>Sign-up</h2>
+        <label for="signUpUsername">Username:</label><br>
+        <input type="text" id="signUpUsername" autocomplete="username"><br>
+        <label for="signUpEmail">Email:</label><br>
+        <input type="email" id="signUpEmail" autocomplete="email"><br>
+        <label for="signupOtp">One-Time Code:</label><br>
+        <input type="text" id="signupOtp" autocomplete="one-time-code"><br>
+        <button type="button" id="register">Sign-up</button>
+    </form>
+
+    <form id="loginForm">
+        <h2>Login</h2>
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" autocomplete="email webauthn"><br>
+        <label for="loginUsername">Username:</label>
+        <input type="text" id="loginUsername" autocomplete="username webauthn"> or
+        <label for="loginOtp">One-Time Code:</label><br>
+        <input type="text" id="loginOtp" autocomplete="one-time-code webauthn"><br>
+        <button type="button" id="login">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    document.getElementById('register').addEventListener('click', function () {
+        const username = document.getElementById('signUpUsername').value.trim();
+        const email = document.getElementById('signUpEmail').value.trim();
+        const otp = document.getElementById('signupOtp').value.trim();
+        // Prefer username over email if both are provided
+        const identifier = username || email;
+        if (!identifier || !otp) {
+            alert('Please fill in either username or email, and a one-time code.');
+            return;
+        }
+        // Assuming register is a function that takes these parameters
+        register(identifier);
+    });
+
+    document.getElementById('login').addEventListener('click', function () {
+        const email = document.getElementById('loginEmail').value.trim();
+        const username = document.getElementById('loginUsername').value.trim();
+        const otp = document.getElementById('loginOtp').value.trim();
+        // Prefer username over email if both are provided
+        const identifier = username || email;
+        if (!identifier || !otp) {
+            alert('Please enter either username or email, and your one-time code to login.');
+            return;
+        }
+        // Assuming regularLogin is a function that takes these parameters
+        regularLogin(identifier);
+    });
+</script>
+</body>
+</html>

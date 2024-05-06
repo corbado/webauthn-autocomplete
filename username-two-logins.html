@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Usernames Login</title>
+    <script src="webauthn.js"></script>
+</head>
+<body>
+
+<h1>Two Usernames Login</h1>
+<a href="/index.html">
+    <button>back</button>
+</a>
+
+<div>
+    <form id="signupForm">
+        <h2>Sign-up</h2>
+        <label for="signUpUsername">Username:</label><br>
+        <input type="text" id="signUpUsername" autocomplete="username"><br>
+        <label for="signupPassword">Password:</label><br>
+        <input type="password" id="signupPassword" autocomplete="new-password"><br>
+        <button type="button" id="register">Sign-up</button>
+    </form>
+
+    <form id="loginForm1">
+        <h2>Login</h2>
+        <label for="loginUsername1">Username:</label><br>
+        <input type="text" id="loginUsername1" autocomplete="username webauthn"><br>
+        <label for="loginPassword1">Password:</label><br>
+        <input type="password" id="loginPassword1" autocomplete="current-password webauthn"><br>
+        <button type="button" id="login1">Login</button>
+    </form>
+    <form id="loginForm2">
+        <h2>Login</h2>
+        <label for="loginUsername2">Username:</label><br>
+        <input type="text" id="loginUsername2" autocomplete="username webauthn"><br>
+        <label for="loginPassword2">Password:</label><br>
+        <input type="password" id="loginPassword2" autocomplete="current-password webauthn"><br>
+        <button type="button" id="login2">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    document.getElementById('register').addEventListener('click', function () {
+        const username = document.getElementById('signUpUsername').value.trim();
+        const password = document.getElementById('signupPassword').value.trim();
+        if (!username || !password) {
+            alert('Please fill in both username and password.');
+            return;
+        }
+        // Assuming register is a function that takes username and password
+        register(username);
+    });
+
+    document.getElementById('login1').addEventListener('click', function () {
+        const username = document.getElementById('loginUsername1').value.trim();
+        const password = document.getElementById('loginPassword1').value.trim();
+        if (!username || !password) {
+            alert('Please fill in both username and password to login.');
+            return;
+        }
+        // Assuming regularLogin is a function that takes username and password
+        regularLogin(username);
+    });
+
+    document.getElementById('login2').addEventListener('click', function () {
+        const username = document.getElementById('loginUsername2').value.trim();
+        const password = document.getElementById('loginPassword2').value.trim();
+        if (!username || !password) {
+            alert('Please fill in both username and password to login.');
+            return;
+        }
+        // Assuming regularLogin is a function that takes username and password
+        regularLogin(username);
+    });
+</script>
+</body>
+</html>

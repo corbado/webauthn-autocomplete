@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAuthn Simple Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        input, button {
+            margin-top: 10px;
+        }
+
+        #status {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>WebAuthn AutoComplete Demo</h1>
+
+<div class="container">
+    Regular cases
+    <ul>
+        <li><a href="webauthn.html">WebAuthn only</a></li>
+        <li><a href="username.html">Username only</a></li>
+        <li><a href="email.html">Email only</a></li>
+        <li><a href="phonenumber.html">Phonenumber only</a></li>
+        <li><a href="username-password.html">Username + Password</a></li>
+        <li><a href="email-password.html">Email + Password</a></li>
+        <li><a href="phonenumber-otp.html">Phonenumber + OTP</a></li>
+        <li><a href="username-email-password.html">Username + Email + Password</a></li>
+        <li><a href="username-email-one-time-code.html">Username + Email + OTP</a></li>
+        <li><a href="textarea.html">Textarea</a></li>
+    </ul>
+    Edge cases
+    <ul>
+        <li><a href="username-two-logins.html">Two login forms (2x Username) in one page</a></li>
+        <li><a href="email-two-logins.html">Two login forms (2x Email) in one page</a></li>
+        <li><a href="username-email-two-logins.html">Two login forms (Username + Email) in one page</a></li>
+        <li><a href="webauthn-token-first.html">WebAuthn token first</a></li>
+        <li><a href="automatic-login.html">Automatic login</a></li>
+    </ul>
+</div>
+
+</body>
+</html>

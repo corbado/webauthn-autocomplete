@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textarea</title>
+    <script src="webauthn.js"></script>
+</head>
+<body>
+
+<h1>Textarea</h1>
+
+<a href="/index.html">
+    <button>back</button>
+</a>
+
+<div>
+    <form id="signupForm">
+        <h2>Sign-up</h2>
+        <label for="signUpEmail">Email:</label><br>
+        <textarea id="signUpEmail" name="signUpEmail" rows="2" cols="30" autocomplete="email"></textarea><br>
+        <button type="button" id="register">Sign-up</button>
+    </form>
+
+    <form id="loginForm">
+        <h2>Login</h2>
+        <label for="loginEmail">Email:</label>
+        <textarea id="loginEmail" name="user-info" rows="4" cols="50" autocomplete="on webauthn"></textarea><br>
+        <button type="button" id="login">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    document.getElementById('register').addEventListener('click', function () {
+        const email = document.getElementById('signUpEmail').value.trim();
+        if (!email) {
+            alert('Please fill in your email address.');
+            return;
+        }
+        // Assuming register is a function that takes these parameters
+        register(email);
+    });
+
+    document.getElementById('login').addEventListener('click', function () {
+        const email = document.getElementById('loginEmail').value.trim();
+        if (!email) {
+            alert('Please enter your email address to login.');
+            return;
+        }
+        // Assuming regularLogin is a function that takes these parameters
+        regularLogin(email);
+    });
+</script>
+</body>
+</html>

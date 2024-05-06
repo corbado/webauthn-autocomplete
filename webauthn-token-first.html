@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAuthn Token First</title>
+    <script src="webauthn.js"></script>
+</head>
+<body>
+
+<h1>WebAuthn Token First</h1>
+
+<a href="/index.html"><button>back</button></a>
+
+<div>
+    <form id="signupForm">
+        <h2>Sign-up</h2>
+        <label for="signUpEmail">Email:</label><br>
+        <input type="email" id="signUpEmail" name="signUpEmail" autocomplete="email"><br>
+        <button type="submit" id="register">Sign-up</button>
+    </form>
+
+    <form id="loginForm">
+        <h2>Login</h2>
+        <label for="loginEmail">Email:</label><br>
+        <input type="email" id="loginEmail" name="email" autocomplete="webauthn email"><br>
+        <button id="login">Login</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    async function register() {
+        const username = document.getElementById('signUpEmail').value.trim();
+        if (!username) {
+            updateStatus('Email is required');
+            return;
+        }
+
+        // Simulate getting challenge and other data from server
+        const publicKeyCredentialCreationOptions = {
+            rp: { name: "Example Corp" },
+            user: {
+                id: new TextEncoder().encode(username),
+                name: username,
+                displayName: username
+            },
+            challenge: Uint8Array.from("randomChallengeString", c=>c.charCodeAt(0)),
+            pubKeyCredParams: [
+                { type: "public-key", alg: -7 }, // ES256 algorithm
+            ],
+            authenticatorSelection: {
+                authenticatorAttachment: "platform",
+                requireResidentKey: false,
+                userVerification: "preferred"
+            },
+            timeout: 60000,
+            attestation: "direct"
+        };
+
+        try {
+            const credential = await navigator.credentials.create({publicKey: publicKeyCredentialCreationOptions});
+            console.log("Credential Created", credential);
+            updateStatus(`Registration successful for ${username}`);
+            // Here, send the `credential` object to the server for verification and storage
+        } catch (err) {
+            console.error("Registration error", err);
+            updateStatus(`Registration failed: ${err.message}`);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Attempt automated login check after page loads
+        try {
+            conditionalMediationLogin();
+
+        } catch (err) {
+            console.error("Auto login check failed", err);
+            updateStatus('Failed to check for automatic login');
+        }
+    });
+
+    async function regularLogin() {
+        const username = document.getElementById('loginEmail').value.trim();
+
+        if (!username) {
+            updateStatus('Email is required');
+            return;
+        }
+
+        // Adjusted publicKeyCredentialRequestOptions for conditional UI
+        const publicKeyCredentialRequestOptions = {
+            challenge: Uint8Array.from("randomChallengeString", c => c.charCodeAt(0)),
+            timeout: 60000,
+            userVerification: "preferred",
+        };
+
+        try {
+            const assertion = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions });
+            console.log("Assertion obtained", assertion);
+            updateStatus(`Login successful for ${username}`);
+            // Here, send the `assertion` object to the server for verification
+        } catch (err) {
+            console.error("Login error", err);
+            updateStatus(`Login failed: ${err.message}`);
+        }
+    }
+
+    async function conditionalMediationLogin() {
+
+        // Adjusted publicKeyCredentialRequestOptions for conditional UI
+        const publicKeyCredentialRequestOptions = {
+            challenge: Uint8Array.from("randomChallengeString", c => c.charCodeAt(0)),
+            timeout: 60000,
+            userVerification: "preferred",
+        };
+
+        try {
+            const assertion = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions, mediation: "conditional" });
+            console.log("Assertion obtained", assertion);
+            updateStatus(`Login successful`);
+            // Here, send the `assertion` object to the server for verification
+        } catch (err) {
+            console.error("Login error", err);
+            updateStatus(`Login failed: ${err.message}`);
+        }
+    }
+
+    function updateStatus(message) {
+        document.getElementById('status').innerText = message;
+    }
+
+    document.getElementById('register').addEventListener('click', register);
+    document.getElementById('login').addEventListener('click', regularLogin);
+</script>
+</body>
+</html>
