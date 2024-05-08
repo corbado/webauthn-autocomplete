@@ -17,7 +17,7 @@
         <label for="signUpPhonenumber">Phonenumber:</label><br>
         <input type="tel" id="signUpPhonenumber" autocomplete="tel"><br>
         <label for="signUpOtp">OTP:</label><br>
-        <input type="text" id="signUpOtp"><br>
+        <input type="text" id="signUpOtp" autocomplete="one-time-code"><br>
         <button type="button" id="register">Sign Up</button>
     </form>
 
@@ -25,9 +25,9 @@
     <form id="loginForm">
         <h2>Login</h2>
         <label for="loginPhonenumber">Phonenumber:</label><br>
-        <input type="tel" id="loginPhonenumber"><br>
+        <input type="tel" id="loginPhonenumber" autocomplete="tel webauthn"><br>
         <label for="loginOtp">OTP:</label><br>
-        <input type="text" id="loginOtp"><br>
+        <input type="text" id="loginOtp" autocomplete="one-time-code webauthn"><br>
         <button type="button" id="login">Login</button>
     </form>
     <div id="status"></div>

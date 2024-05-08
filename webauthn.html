@@ -17,8 +17,6 @@
 <div>
     <form id="signupForm">
         <h2>Sign-up</h2>
-        <label for="signUpInput">Input:</label><br>
-        <input id="signUpInput"><br>
         <button type="button" id="register">Sign-up</button>
     </form>
 
@@ -33,13 +31,11 @@
 
 <script>
     document.getElementById('register').addEventListener('click', function() {
-        const username = document.getElementById('signUpInput').value.trim();
-        register(username);
+        register("webauthn-only");
     });
 
     document.getElementById('login').addEventListener('click', function() {
-        const username = document.getElementById('loginInput').value.trim();
-        regularLogin(username);
+        regularLogin("webauthn-only");
     });
 </script>
 </body>

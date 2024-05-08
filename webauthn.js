@@ -1,53 +1,4 @@
-let abortController = null;
-async function register(username) {
-
-    if (abortController) {
-        abortController.abort();
-        abortController = null; // Reset the controller after aborting
-    }
-
-    if (!username) {
-        updateStatus('Username is required');
-        return;
-    }
-    console.log("Username is "+ username)
-
-
-    // Simulate getting challenge and other data from server
-    const publicKeyCredentialCreationOptions = {
-        rp: { name: "Corbado" },
-        user: {
-            id: new TextEncoder().encode(username),
-            name: username,
-            displayName: username
-        },
-        challenge: Uint8Array.from("randomChallengeString", c=>c.charCodeAt(0)),
-        pubKeyCredParams: [
-            { type: "public-key", alg: -7 }, // ES256 algorithm
-            { type: "public-key", alg: -257 },
-        ],
-        authenticatorSelection: {
-            authenticatorAttachment: "platform",
-            requireResidentKey: false,
-            userVerification: "preferred"
-        },
-        timeout: 60000,
-        attestation: "direct"
-    };
-
-    try {
-        const credential = await navigator.credentials.create({publicKey: publicKeyCredentialCreationOptions});
-        console.log("Credential Created", credential);
-        updateStatus(`Registration successful for ${username}`);
-        // Here, send the `credential` object to the server for verification and storage
-    } catch (err) {
-        console.error("Registration error", err);
-        updateStatus(`Registration failed: ${err.message}`);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
-    // Attempt automated login check after page loads
     try {
         conditionalMediationLogin();
 
@@ -57,13 +8,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-async function regularLogin(username) {
-    if (abortController) {
-        abortController.abort();
-        abortController = null; // Reset the controller after aborting
+let abortController = null;
+
+async function register(username) {
+
+    handleAbort();
+
+    if (!username) {
+        updateStatus('Username is required');
+        return;
     }
 
-    // Create a new AbortController for this operation
+    abortController = new abortController();
+
+    const publicKeyCredentialCreationOptions = {
+        rp: {name: "Corbado"},
+        user: {
+            id: new TextEncoder().encode(username),
+            name: username,
+            displayName: username
+        },
+        challenge: generateChallenge("randomChallengeString"),
+        pubKeyCredParams: [
+            {type: "public-key", alg: -7},
+            {type: "public-key", alg: -257},
+        ],
+        authenticatorSelection: {
+            authenticatorAttachment: "platform",
+            requireResidentKey: false,
+            userVerification: "preferred"
+        },
+        timeout: 60000,
+        attestation: "direct",
+        signal: abortController.signal
+    };
+
+    try {
+        const credential = await navigator.credentials.create({publicKey: publicKeyCredentialCreationOptions});
+        console.log("Credential Created", credential);
+        updateStatus(`Registration successful for ${username}`);
+    } catch (err) {
+        console.error("Registration error", err);
+        updateStatus(`Registration failed: ${err.message}`);
+    }
+}
+
+
+async function regularLogin(username) {
+
+    handleAbort();
     abortController = new AbortController();
 
     if (!username) {
@@ -73,16 +66,18 @@ async function regularLogin(username) {
 
     // Adjusted publicKeyCredentialRequestOptions for conditional UI
     const publicKeyCredentialRequestOptions = {
-        challenge: Uint8Array.from("randomChallengeString", c => c.charCodeAt(0)),
+        challenge: generateChallenge("randomChallengeString"),
         timeout: 60000,
         userVerification: "preferred",
     };
 
     try {
-        const assertion = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions });
+        const assertion = await navigator.credentials.get({
+            publicKey: publicKeyCredentialRequestOptions,
+            signal: abortController.signal
+        });
         console.log("Assertion obtained", assertion);
         updateStatus(`Login successful for ${username}`);
-        // Here, send the `assertion` object to the server for verification
     } catch (err) {
         console.error("Login error", err);
         updateStatus(`Login failed: ${err.message}`);
@@ -91,30 +86,46 @@ async function regularLogin(username) {
 
 async function conditionalMediationLogin() {
 
+    handleAbort();
     abortController = new AbortController();
-    const signal = abortController.signal;
-
 
     // Adjusted publicKeyCredentialRequestOptions for conditional UI
     const publicKeyCredentialRequestOptions = {
-        challenge: Uint8Array.from("randomChallengeString", c => c.charCodeAt(0)),
+        challenge: generateChallenge("randomChallengeString"),
         timeout: 60000,
         userVerification: "preferred",
     };
 
     try {
-        const assertion = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions, mediation: "conditional", signal: signal});
-        console.log("Assertion obtained", assertion);
-        updateStatus(`Login successful`);
-        // Here, send the `assertion` object to the server for verification
+        const assertion = await navigator.credentials.get({
+            publicKey: publicKeyCredentialRequestOptions,
+            mediation: "conditional",
+            signal: abortController.signal
+        });
+        console.log("Conditional login successful", assertion);
+        updateStatus(`Conditional login successful`);
     } catch (err) {
-        console.error("Login error", err);
-        updateStatus(`Login failed: ${err.message}`);
+        console.error("Conditional login error", err);
+        updateStatus(`Conditional login failed: ${err.name} `);
+        if (err.name === 'AbortError') {
+            updateStatus('Conditional login aborted.');
+        }
+    }
+}
+
+function handleAbort() {
+    if (abortController) {
+        abortController.abort();
+        abortController = null;
     }
 }
 
 function updateStatus(message) {
     document.getElementById('status').innerText = message;
+}
+
+function generateChallenge(string) {
+    return Uint8Array.from(string, c => c.charCodeAt(0));
 }
 
 document.getElementById('register').addEventListener('click', register);

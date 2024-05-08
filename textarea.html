@@ -33,13 +33,7 @@
 
 <script>
     document.getElementById('register').addEventListener('click', function () {
-        const email = document.getElementById('signUpEmail').value.trim();
-        if (!email) {
-            alert('Please fill in your email address.');
-            return;
-        }
-        // Assuming register is a function that takes these parameters
-        register(email);
+        register("textarea");
     });
 
     document.getElementById('login').addEventListener('click', function () {

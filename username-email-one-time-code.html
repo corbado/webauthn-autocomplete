@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Username, Email + Password</title>
+    <title>Username, Email + OTP</title>
     <script src="webauthn.js"></script>
 </head>
 <body>
 
-<h1>Username, Email + Password</h1>
+<h1>Username, Email + OTP</h1>
 <a href="/index.html">
     <button>back</button>
 </a>
@@ -16,10 +16,10 @@
 <div>
     <form id="signupForm">
         <h2>Sign-up</h2>
-        <label for="signUpUsername">Username:</label><br>
-        <input type="text" id="signUpUsername" autocomplete="username"><br>
         <label for="signUpEmail">Email:</label><br>
         <input type="email" id="signUpEmail" autocomplete="email"><br>
+        <label for="signUpUsername">Username:</label><br>
+        <input type="text" id="signUpUsername" autocomplete="username"><br>
         <label for="signupOtp">One-Time Code:</label><br>
         <input type="text" id="signupOtp" autocomplete="one-time-code"><br>
         <button type="button" id="register">Sign-up</button>

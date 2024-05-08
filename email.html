@@ -10,13 +10,15 @@
 
 <h1>Email</h1>
 
-<a href="/index.html"><button>back</button></a>
+<a href="/index.html">
+    <button>back</button>
+</a>
 
 <div>
     <form id="signupForm">
         <h2>Sign-up</h2>
         <label for="signUpEmail">Email:</label><br>
-        <input type="email" id="signUpEmail"autocomplete="email"><br>
+        <input type="email" id="signUpEmail" autocomplete="email"><br>
         <button type="button" id="register">Sign-up</button>
     </form>
 
@@ -30,12 +32,12 @@
 </div>
 
 <script>
-    document.getElementById('register').addEventListener('click', function() {
+    document.getElementById('register').addEventListener('click', function () {
         const username = document.getElementById('signUpEmail').value.trim();
         register(username);
     });
 
-    document.getElementById('login').addEventListener('click', function() {
+    document.getElementById('login').addEventListener('click', function () {
         const username = document.getElementById('loginEmail').value.trim();
         regularLogin(username);
     });
