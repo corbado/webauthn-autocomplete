@@ -19,7 +19,7 @@ async function register(username) {
         return;
     }
 
-    abortController = new abortController();
+    abortController = new AbortController();
 
     const publicKeyCredentialCreationOptions = {
         rp: {name: "Corbado"},
@@ -127,6 +127,3 @@ function updateStatus(message) {
 function generateChallenge(string) {
     return Uint8Array.from(string, c => c.charCodeAt(0));
 }
-
-document.getElementById('register').addEventListener('click', register);
-document.getElementById('login').addEventListener('click', regularLogin);
