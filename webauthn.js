@@ -22,7 +22,7 @@ async function register(username) {
     abortController = new AbortController();
 
     const publicKeyCredentialCreationOptions = {
-        rp: {name: "Corbado"},
+        rp: {name: "Corbado", id:"localhost"},
         user: {
             id: new TextEncoder().encode(username),
             name: username,
