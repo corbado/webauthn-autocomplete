@@ -22,7 +22,7 @@ async function register(username) {
     abortController = new AbortController();
 
     const publicKeyCredentialCreationOptions = {
-        rp: {name: "Corbado", id:"localhost"},
+        rp: {name: "Corbado", id:"webauthn-autocomplete.vercel.app"},
         user: {
             id: new TextEncoder().encode(username),
             name: username,
@@ -94,6 +94,7 @@ async function conditionalMediationLogin() {
         challenge: generateChallenge("randomChallengeString"),
         timeout: 60000,
         userVerification: "preferred",
+        rpId: "webauthn-autocomplete.vercel.app"
     };
 
     try {
