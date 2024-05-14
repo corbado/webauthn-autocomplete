@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         conditionalMediationLogin();
+        console.log("Conditional Mediation Login call started")
 
     } catch (err) {
         console.error("Auto login check failed", err);
@@ -22,7 +23,7 @@ async function register(username) {
     abortController = new AbortController();
 
     const publicKeyCredentialCreationOptions = {
-        rp: {name: "Corbado", id:"webauthn-autocomplete.vercel.app"},
+        rp: {name: "Corbado"},
         user: {
             id: new TextEncoder().encode(username),
             name: username,
@@ -35,7 +36,7 @@ async function register(username) {
         ],
         authenticatorSelection: {
             authenticatorAttachment: "platform",
-            requireResidentKey: false,
+            residentKey: "preferred",
             userVerification: "preferred"
         },
         timeout: 60000,
@@ -64,7 +65,6 @@ async function regularLogin(username) {
         return;
     }
 
-    // Adjusted publicKeyCredentialRequestOptions for conditional UI
     const publicKeyCredentialRequestOptions = {
         challenge: generateChallenge("randomChallengeString"),
         timeout: 60000,
@@ -88,16 +88,17 @@ async function conditionalMediationLogin() {
 
     handleAbort();
     abortController = new AbortController();
+    console.log("new AbortController created")
 
     // Adjusted publicKeyCredentialRequestOptions for conditional UI
     const publicKeyCredentialRequestOptions = {
         challenge: generateChallenge("randomChallengeString"),
         timeout: 60000,
         userVerification: "preferred",
-        rpId: "webauthn-autocomplete.vercel.app"
     };
 
     try {
+        console.log("start navigator.credentials.get call")
         const assertion = await navigator.credentials.get({
             publicKey: publicKeyCredentialRequestOptions,
             mediation: "conditional",
