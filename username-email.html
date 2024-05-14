@@ -20,7 +20,7 @@
         <input type="text" id="username" name="username" autocomplete="username webauthn"><br>
         <label for="signUpEmail">Email:</label><br>
         <input type="email" id="signUpEmail" name="email" autocomplete="email webauthn"><br>
-        <button type="submit" id="register">Sign Up</button>
+        <button type="submit" id="register">Sign-up</button>
     </form>
 
     <form id="loginForm">
@@ -37,7 +37,6 @@
 
 <script>
     async function register() {
-        // const username = document.getElementById('username').value.trim();
         const username = document.getElementById('signUpEmail').value.trim();
         if (!username) {
             updateStatus('Username is required for registration');
